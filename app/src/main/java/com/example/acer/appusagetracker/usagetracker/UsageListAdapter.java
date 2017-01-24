@@ -45,13 +45,16 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         private final TextView mPackageName;
         private final TextView mLastTimeUsed;
         private final ImageView mAppIcon;
+        private final TextView mPercentage;
 
         public ViewHolder(View v) {
             super(v);
             mPackageName = (TextView) v.findViewById(R.id.textview_package_name);
             mLastTimeUsed = (TextView) v.findViewById(R.id.textview_last_time_used);
             mAppIcon = (ImageView) v.findViewById(R.id.app_icon);
+            mPercentage=(TextView) v.findViewById(R.id.percentage);
         }
+
 
         public TextView getLastTimeUsed() {
             return mLastTimeUsed;
@@ -63,6 +66,10 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
         public ImageView getAppIcon() {
             return mAppIcon;
+        }
+
+        public TextView getPercentage() {
+            return mPercentage;
         }
     }
 
@@ -91,6 +98,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         viewHolder.getPackageName().setText(applicationName);
         long lastTimeUsed = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
           viewHolder.getLastTimeUsed().setText((lastTimeUsed/1000)+"sec");
+        viewHolder.getPercentage().setText("5 %");
        // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
     }

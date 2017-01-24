@@ -84,8 +84,8 @@ public class AppUsageStatisticsFragment extends Fragment {
 
         mUsageListAdapter = new UsageListAdapter(getContext());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_app_usage);
-     //   mLayoutManager = mRecyclerView.getLayoutManager();
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mLayoutManager = mRecyclerView.getLayoutManager();
+      //  mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.scrollToPosition(0);
         mRecyclerView.setAdapter(mUsageListAdapter);
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
