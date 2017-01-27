@@ -44,7 +44,6 @@ public class AppUsageStatisticsFragment extends Fragment {
     UsageStatsManager mUsageStatsManager;
     UsageListAdapter mUsageListAdapter;
     RecyclerView mRecyclerView;
-    RecyclerView.LayoutManager mLayoutManager;
     Button mOpenUsageSettingButton;
     Spinner mSpinner;
     private GridLayoutManager mGridLayoutManager;
@@ -67,7 +66,7 @@ public class AppUsageStatisticsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mUsageStatsManager = (UsageStatsManager) getActivity()
                 .getSystemService(Context.USAGE_STATS_SERVICE);
     }
@@ -84,9 +83,8 @@ public class AppUsageStatisticsFragment extends Fragment {
 
         mUsageListAdapter = new UsageListAdapter(getContext());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_app_usage);
-        mLayoutManager = mRecyclerView.getLayoutManager();
-      //  mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mRecyclerView.scrollToPosition(0);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        //mRecyclerView.scrollToPosition(0);
         mRecyclerView.setAdapter(mUsageListAdapter);
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
         mSpinner = (Spinner) rootView.findViewById(R.id.spinner_time_span);

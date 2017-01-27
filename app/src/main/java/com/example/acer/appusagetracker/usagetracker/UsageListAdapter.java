@@ -50,7 +50,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         public ViewHolder(View v) {
             super(v);
             mPackageName = (TextView) v.findViewById(R.id.textview_package_name);
-            mLastTimeUsed = (TextView) v.findViewById(R.id.textview_last_time_used);
+            mLastTimeUsed = (TextView) v.findViewById(R.id.textview_total_time);
             mAppIcon = (ImageView) v.findViewById(R.id.app_icon);
             mPercentage=(TextView) v.findViewById(R.id.percentage);
         }
