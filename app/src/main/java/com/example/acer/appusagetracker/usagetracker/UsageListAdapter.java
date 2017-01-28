@@ -19,6 +19,7 @@ package com.example.acer.appusagetracker.usagetracker;
 
         import java.beans.IndexedPropertyChangeEvent;
         import java.text.DateFormat;
+        import java.text.DecimalFormat;
         import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.util.Date;
@@ -30,8 +31,8 @@ package com.example.acer.appusagetracker.usagetracker;
 public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.ViewHolder> {
 
     private List<CustomUsageStats> mCustomUsageStatsList = new ArrayList<>();
-    private DateFormat mDateFormat = new SimpleDateFormat("hh:mm:ss");
     private Context context;
+    private long total;
     UsageListAdapter(Context c)
     {
         context=c;
@@ -96,11 +97,52 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         }
         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
         viewHolder.getPackageName().setText(applicationName);
-        long lastTimeUsed = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
-          viewHolder.getLastTimeUsed().setText((lastTimeUsed/1000)+"sec");
-        viewHolder.getPercentage().setText("5 %");
+        long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
+          viewHolder.getLastTimeUsed().setText(calculateTime(timeInForeground));
+        viewHolder.getPercentage().setText(calculatePercent(timeInForeground));
        // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+    }
+
+    private long totalTime( List<CustomUsageStats> list){
+        long total=0;
+        for(CustomUsageStats app:list){
+            total+=app.usageStats.getTotalTimeInForeground();
+        }
+        return total;
+    }
+
+    private String calculateTime(long ms)
+    { String total="";
+        long sec=ms/1000;
+        long day;
+        long hour;
+        long min;
+        if(sec>=(86400)){
+            day=sec/86400;
+            sec=sec%86400;
+            total=total+day+"d";
+        }
+        if(sec>=3600){
+            hour=sec/3600;
+            sec=sec%3600;
+            total=total+hour+"h";
+        }
+        if(sec>=60){
+            min=sec/60;
+            sec=sec%60;
+            total=total+min+"m";
+        }
+        if(sec>0)
+        {
+            total=total+sec+"s";
+        }
+        return total;
+    }
+
+    private String calculatePercent(long ms) {
+        DecimalFormat f = new DecimalFormat("##.00");
+        return f.format(ms*100.0/(double)total)+"%";
     }
 
     @Override
@@ -110,5 +152,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
     public void setCustomUsageStatsList(List<CustomUsageStats> customUsageStats) {
         mCustomUsageStatsList = customUsageStats;
+        total=totalTime(mCustomUsageStatsList);
+        System.out.println("total time :"+total);
     }
 }

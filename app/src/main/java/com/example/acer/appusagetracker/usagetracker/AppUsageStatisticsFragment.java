@@ -219,4 +219,5 @@ public class AppUsageStatisticsFragment extends Fragment {
             return null;
         }
     }
+
 }
