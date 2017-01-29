@@ -5,6 +5,7 @@ package com.example.acer.appusagetracker.usagetracker;
  */
 
         import android.app.Application;
+        import android.app.Dialog;
         import android.content.Context;
         import android.content.pm.ApplicationInfo;
         import android.content.pm.PackageManager;
@@ -12,8 +13,10 @@ package com.example.acer.appusagetracker.usagetracker;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import com.example.acer.appusagetracker.R;
 
@@ -47,6 +50,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         private final TextView mLastTimeUsed;
         private final ImageView mAppIcon;
         private final TextView mPercentage;
+        private Context mContext;
 
         public ViewHolder(View v) {
             super(v);
@@ -97,11 +101,38 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         }
         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
         viewHolder.getPackageName().setText(applicationName);
-        long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
+        final long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
           viewHolder.getLastTimeUsed().setText(calculateTime(timeInForeground));
         viewHolder.getPercentage().setText(calculatePercent(timeInForeground));
        // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DateFormat dateFormat= SimpleDateFormat.getDateTimeInstance();
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.app_dialog);
+                dialog.setTitle("Usage Details");
+                TextView text = (TextView) dialog.findViewById(R.id.appname);
+                text.setText(applicationName);
+                TextView lastused = (TextView) dialog.findViewById(R.id.last_used);
+                lastused.setText("Last Used : "+dateFormat.format(new Date(mCustomUsageStatsList.get(position).usageStats.getLastTimeStamp()/1000)));
+                TextView totalused = (TextView) dialog.findViewById(R.id.total_used);
+                totalused.setText("Total time used : "+timeInForeground);
+                ImageView image = (ImageView) dialog.findViewById(R.id.image_icon);
+                image.setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+
+            }
+        });
     }
 
     private long totalTime( List<CustomUsageStats> list){
