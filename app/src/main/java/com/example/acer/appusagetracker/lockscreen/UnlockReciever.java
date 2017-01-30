@@ -17,7 +17,7 @@ public class UnlockReciever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             KeyguardManager keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
-            if (keyguardManager.isKeyguardSecure()) {
+//            if (keyguardManager.isKeyguardSecure()) {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_default_app_launcher)
@@ -27,7 +27,7 @@ public class UnlockReciever extends BroadcastReceiver {
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(1, mBuilder.build());
 
-            }
+    //        }
         }
     }
 

@@ -5,6 +5,9 @@ import android.app.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -13,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.acer.appusagetracker.lockscreen.UnlockReciever;
 import com.example.acer.appusagetracker.usagetracker.AppUsageStatisticsFragment;
 import com.example.acer.appusagetracker.usagetracker.PagerAdapter;
 
@@ -34,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
 //                    .commit();
 //        }
 //    }
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new UnlockReciever();
+        registerReceiver(mReceiver, filter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

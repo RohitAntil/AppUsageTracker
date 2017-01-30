@@ -22,7 +22,7 @@
         <receiver android:name=".lockscreen.UnlockReciever"   android:enabled="true"
             android:exported="false" >
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_USER_PRESENT" >
+                <action android:name="android.intent.action.ACTION_SCREEN_ON" >
                 </action>
             </intent-filter>
         </receiver>
