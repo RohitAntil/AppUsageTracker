@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.database.lockscreen;
+package com.example.acer.appusagetracker.lockscreen;
 
 /**
  * Created by rohit02.kumar on 1/30/2017.

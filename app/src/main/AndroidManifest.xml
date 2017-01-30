@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".database.lockscreen.UnlockReciever"   android:enabled="true"
+        <receiver android:name=".lockscreen.UnlockReciever"   android:enabled="true"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_USER_PRESENT" >

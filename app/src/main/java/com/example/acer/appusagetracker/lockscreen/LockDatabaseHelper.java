@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.database.lockscreen;
+package com.example.acer.appusagetracker.lockscreen;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
