@@ -19,10 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".lockscreen.UnlockCountService"
+            android:label="UnlockService"
+           />
         <receiver android:name=".lockscreen.UnlockReciever"   android:enabled="true"
             android:exported="false" >
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_SCREEN_ON" >
+                <action android:name="android.intent.action.USER_PRESENT" >
                 </action>
             </intent-filter>
         </receiver>

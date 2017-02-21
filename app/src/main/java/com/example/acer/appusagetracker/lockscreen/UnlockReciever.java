@@ -13,7 +13,7 @@ import com.example.acer.appusagetracker.R;
  * Created by rohit02.kumar on 1/30/2017.
  */
 public class UnlockReciever extends BroadcastReceiver {
-
+       static int count=0;
         @Override
         public void onReceive(Context context, Intent intent) {
             KeyguardManager keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
@@ -22,7 +22,7 @@ public class UnlockReciever extends BroadcastReceiver {
                         new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_default_app_launcher)
                                 .setContentTitle("App Usage")
-                                .setContentText("Phone Unlocked");
+                                .setContentText("Today device unlocked"+ count++ +" times ");
 
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(1, mBuilder.build());

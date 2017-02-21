@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.acer.appusagetracker.lockscreen.UnlockCountService;
 import com.example.acer.appusagetracker.lockscreen.UnlockReciever;
 import com.example.acer.appusagetracker.usagetracker.AppUsageStatisticsFragment;
 import com.example.acer.appusagetracker.usagetracker.PagerAdapter;
@@ -41,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Detailed View"));
         tabLayout.addTab(tabLayout.newTab().setText("Barchart View"));
         tabLayout.addTab(tabLayout.newTab().setText("TimeLine View"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        Intent myIntent = new Intent(this,UnlockCountService.class);
+        this.startService(myIntent);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
