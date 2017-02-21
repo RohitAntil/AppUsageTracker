@@ -57,10 +57,12 @@ public class TimeLineViewFragment extends Fragment {
         mRecyclerView.setAdapter(mTimeLineAdapter);
     }
     private List<UsageEventsItem> getTimeStamps()
-    { int interval = UsageStatsManager.INTERVAL_MONTHLY;
+    { int interval = UsageStatsManager.INTERVAL_DAILY;
         Calendar calendar = Calendar.getInstance();
         long endTime = calendar.getTimeInMillis();
-        calendar.add(Calendar.DATE, -1);
+        //calendar.add(Calendar.DAY_OF_MONTH,-1);
+      //  endTime=calendar.getTimeInMillis();
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
         long startTime = calendar.getTimeInMillis();
         UsageStatsManager usageStatsMgr = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
         UsageEvents events = usageStatsMgr.queryEvents(startTime, endTime);

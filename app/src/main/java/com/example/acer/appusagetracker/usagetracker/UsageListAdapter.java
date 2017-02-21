@@ -8,6 +8,7 @@ package com.example.acer.appusagetracker.usagetracker;
         import android.app.Dialog;
         import android.content.Context;
         import android.content.pm.ApplicationInfo;
+        import android.content.pm.PackageInfo;
         import android.content.pm.PackageManager;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
@@ -91,7 +92,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-        PackageManager pm= context.getPackageManager();
+        final PackageManager pm= context.getPackageManager();
         ApplicationInfo ai=null;
         try {
             ai=pm.getApplicationInfo(mCustomUsageStatsList.get(position).usageStats.getPackageName(), 0);
@@ -101,19 +102,31 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         }
         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
         viewHolder.getPackageName().setText(applicationName);
+
         final long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
           viewHolder.getLastTimeUsed().setText(calculateTime(timeInForeground));
         viewHolder.getPercentage().setText(calculatePercent(timeInForeground));
        // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+
+        /* onItemClickListener() */
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 DateFormat dateFormat= SimpleDateFormat.getDateTimeInstance();
                 final Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.app_dialog);
+                String versionName = "";
+                int versionCode = -1;
+                try {
+                    PackageInfo packageInfo = pm.getPackageInfo(mCustomUsageStatsList.get(position).usageStats.getPackageName(), 0);
+                    versionName = packageInfo.versionName;
+                    versionCode = packageInfo.versionCode;
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
                 dialog.setTitle("Usage Details");
                 TextView text = (TextView) dialog.findViewById(R.id.appname);
-                text.setText(applicationName);
+                text.setText(mCustomUsageStatsList.get(position).usageStats.getPackageName()+" "+versionName+" "+versionCode);
                 TextView lastused = (TextView) dialog.findViewById(R.id.last_used);
                 lastused.setText("Last Used : "+dateFormat.format(new Date(mCustomUsageStatsList.get(position).usageStats.getLastTimeStamp()/1000)));
                 TextView totalused = (TextView) dialog.findViewById(R.id.total_used);
