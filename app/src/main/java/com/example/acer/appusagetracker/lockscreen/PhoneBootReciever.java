@@ -14,6 +14,7 @@ public class PhoneBootReciever extends BroadcastReceiver {
 
             Intent myIntent = new Intent(context,UnlockCountService.class);
             context.startService(myIntent);
+          //  context.bindService(new Intent(context, UnlockCountService.class),mServiceConnection, context.BIND_AUTO_CREATE);
 
         }
     }

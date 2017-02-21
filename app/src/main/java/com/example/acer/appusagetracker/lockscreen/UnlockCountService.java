@@ -15,9 +15,6 @@ public class UnlockCountService extends Service{
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         //TODO do something useful
-        IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
-        BroadcastReceiver mReceiver = new UnlockReciever();
-        registerReceiver(mReceiver, filter);
         return Service.START_STICKY;
     }
 
@@ -25,5 +22,12 @@ public class UnlockCountService extends Service{
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
+        BroadcastReceiver mReceiver = new UnlockReciever();
+        registerReceiver(mReceiver, filter);
     }
 }

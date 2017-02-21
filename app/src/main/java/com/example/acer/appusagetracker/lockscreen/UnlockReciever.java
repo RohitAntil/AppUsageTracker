@@ -9,20 +9,29 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.acer.appusagetracker.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by rohit02.kumar on 1/30/2017.
  */
 public class UnlockReciever extends BroadcastReceiver {
+       static boolean isActive=false;
        static int count=0;
         @Override
         public void onReceive(Context context, Intent intent) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yy");
+            Date dateobj = new Date();
+            System.out.println(df.format(dateobj));
+
             KeyguardManager keyguardManager = (KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE);
 //            if (keyguardManager.isKeyguardSecure()) {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_default_app_launcher)
                                 .setContentTitle("App Usage")
-                                .setContentText("Today device unlocked"+ count++ +" times ");
+                                .setContentText("Today device unlocked "+ count++ +" times ");
 
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(1, mBuilder.build());

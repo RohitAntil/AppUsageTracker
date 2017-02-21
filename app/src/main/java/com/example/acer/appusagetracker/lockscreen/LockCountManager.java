@@ -10,6 +10,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rohit02.kumar on 1/30/2017.
@@ -64,21 +67,35 @@ public class LockCountManager  {
                         + " = " + date, null, null, null,null);
         return cursor.getInt(1);
     }
-    public ArrayList<Lock> getAllNote_Objects() {
-        ArrayList<Lock> notes = new ArrayList<Lock>();
+    public List<Lock> getAllLock_Objects() {
+       List<Lock> countList=new ArrayList<Lock>();
 
         Cursor cursor = mDatabase.query(ScreenLockTable.TABLE_LOCK,
-                mAllColumns, null, null, null, null,
-                ScreenLockTable.COLUMN_DATE + DEFAULT_SORT_ORDER);
+                mAllColumns, null, null, null, null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Lock lock = cursorToLock_Object(cursor);
-            notes.add(lock);
+              countList.add(lock);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return notes;
+        return countList;
+    }
+    public boolean isEntryExists(String date) {
+        List<Lock> countList=new ArrayList<Lock>();
+
+        Cursor cursor = mDatabase.query(ScreenLockTable.TABLE_LOCK,
+                mAllColumns, null, null, null, null,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Lock lock = cursorToLock_Object(cursor);
+            countList.add(lock);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return false;
     }
     private Lock cursorToLock_Object(Cursor cursor) {
         Lock lock = new Lock();
@@ -88,4 +105,5 @@ public class LockCountManager  {
         lock.setCount(cursor.getInt(1));
         return lock;
     }
+
 }
