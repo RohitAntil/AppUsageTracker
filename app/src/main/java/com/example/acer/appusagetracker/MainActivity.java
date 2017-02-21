@@ -38,10 +38,7 @@ public class MainActivity extends AppCompatActivity {
 //                    .commit();
 //        }
 //    }
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        BroadcastReceiver mReceiver = new UnlockReciever();
-        registerReceiver(mReceiver, filter);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

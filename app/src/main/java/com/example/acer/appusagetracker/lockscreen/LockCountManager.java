@@ -43,6 +43,7 @@ public class LockCountManager  {
     }
 
     public long updateLockCount(long date,int count) {
+
         ContentValues values = new ContentValues();
         values.put(ScreenLockTable.COLUMN_DATE, date);
         values.put(ScreenLockTable.COLUMN_COUNT, count);
@@ -56,7 +57,13 @@ public class LockCountManager  {
                 + " = " + date, null);
         return deleteStatus;
     }
-
+    public int getCount(long date)
+    {
+        Cursor cursor = mDatabase.query(ScreenLockTable.TABLE_LOCK,
+                mAllColumns,  ScreenLockTable.COLUMN_DATE
+                        + " = " + date, null, null, null,null);
+        return cursor.getInt(1);
+    }
     public ArrayList<Lock> getAllNote_Objects() {
         ArrayList<Lock> notes = new ArrayList<Lock>();
 
