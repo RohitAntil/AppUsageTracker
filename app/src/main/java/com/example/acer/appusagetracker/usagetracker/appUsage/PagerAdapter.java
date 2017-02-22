@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.appUsage;
 
 /**
  * Created by Acer on 1/25/2017.
@@ -6,6 +6,10 @@ package com.example.acer.appusagetracker.usagetracker;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.acer.appusagetracker.usagetracker.appUsage.AppUsageStatisticsFragment;
+import com.example.acer.appusagetracker.usagetracker.barchart.BarChartView;
+import com.example.acer.appusagetracker.usagetracker.timeline.TimeLineViewFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;

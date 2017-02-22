@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.appUsage;
 
 /**
  * Created by Acer on 1/18/2017.

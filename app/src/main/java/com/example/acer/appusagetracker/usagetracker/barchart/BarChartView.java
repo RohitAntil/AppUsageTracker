@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.barchart;
 
 
 import android.os.Bundle;

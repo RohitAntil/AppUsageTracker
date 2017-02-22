@@ -1,13 +1,8 @@
 package com.example.acer.appusagetracker;
 
-import android.app.Activity;
 
-
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -17,9 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.acer.appusagetracker.lockscreen.UnlockCountService;
-import com.example.acer.appusagetracker.lockscreen.UnlockReciever;
-import com.example.acer.appusagetracker.usagetracker.AppUsageStatisticsFragment;
-import com.example.acer.appusagetracker.usagetracker.PagerAdapter;
+import com.example.acer.appusagetracker.usagetracker.appUsage.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //        FragmentManager fragmentManager = getFragmentManager();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        UsageList usage = new UsageList();

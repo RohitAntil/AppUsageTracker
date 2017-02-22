@@ -1,10 +1,9 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.appUsage;
 
 /**
  * Created by Acer on 1/18/2017.
  */
 
-        import android.app.Application;
         import android.app.Dialog;
         import android.content.Context;
         import android.content.pm.ApplicationInfo;
@@ -17,11 +16,9 @@ package com.example.acer.appusagetracker.usagetracker;
         import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
-        import android.widget.Toast;
 
         import com.example.acer.appusagetracker.R;
 
-        import java.beans.IndexedPropertyChangeEvent;
         import java.text.DateFormat;
         import java.text.DecimalFormat;
         import java.text.SimpleDateFormat;
@@ -128,9 +125,9 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
                 TextView text = (TextView) dialog.findViewById(R.id.appname);
                 text.setText(mCustomUsageStatsList.get(position).usageStats.getPackageName()+" "+versionName+" "+versionCode);
                 TextView lastused = (TextView) dialog.findViewById(R.id.last_used);
-                lastused.setText("Last Used : "+dateFormat.format(new Date(mCustomUsageStatsList.get(position).usageStats.getLastTimeStamp()/1000)));
+                lastused.setText("Last Used : "+dateFormat.format(new Date(mCustomUsageStatsList.get(position).usageStats.getLastTimeUsed())));
                 TextView totalused = (TextView) dialog.findViewById(R.id.total_used);
-                totalused.setText("Total time used : "+timeInForeground);
+                totalused.setText("Total time used : "+timeInForeground/1000 +" sec");
                 ImageView image = (ImageView) dialog.findViewById(R.id.image_icon);
                 image.setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
 

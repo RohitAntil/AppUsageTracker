@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.appUsage;
 
 /**
  * Created by Acer on 1/18/2017.
@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,12 +29,9 @@ import com.example.acer.appusagetracker.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -132,8 +128,13 @@ public class AppUsageStatisticsFragment extends Fragment {
     public List<UsageStats> getUsageStatistics(int intervalType) {
         // Get the app statistics since one year ago from the current time.
         Calendar cal = Calendar.getInstance();
-        if(intervalType==UsageStatsManager.INTERVAL_DAILY)
-        cal.add(Calendar.DATE, -1);
+        if(intervalType==UsageStatsManager.INTERVAL_DAILY) {
+            cal.add(Calendar.DATE, -1);
+            cal.set(Calendar.MILLISECOND, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+        }
         else if(intervalType==UsageStatsManager.INTERVAL_WEEKLY)
             cal.add(Calendar.WEEK_OF_MONTH, -1);
         else if(intervalType==UsageStatsManager.INTERVAL_MONTHLY)
@@ -141,22 +142,22 @@ public class AppUsageStatisticsFragment extends Fragment {
         else if(intervalType==UsageStatsManager.INTERVAL_YEARLY)
             cal.add(Calendar.YEAR, -1);
 
-        List<UsageStats> queryUsageStats = mUsageStatsManager
-                .queryUsageStats(intervalType, cal.getTimeInMillis(),
-                        System.currentTimeMillis());
-        for(UsageStats st:queryUsageStats)
-        {
-            Log.i(st.getPackageName(),st.toString());
-        }
-
-//        Map<String,UsageStats> queryUsageStatsMap = mUsageStatsManager
-//                .queryAndAggregateUsageStats( cal.getTimeInMillis(),
+//        List<UsageStats> queryUsageStats = mUsageStatsManager
+//                .queryUsageStats(intervalType, cal.getTimeInMillis(),
 //                        System.currentTimeMillis());
-//        List<UsageStats> queryUsageStats=new ArrayList<UsageStats>() ;
-//        for(Map.Entry<String,UsageStats> stat: queryUsageStatsMap.entrySet())
+//        for(UsageStats st:queryUsageStats)
 //        {
-//            queryUsageStats.add(stat.getValue());
+//            Log.i(st.getPackageName(),st.toString());
 //        }
+
+        Map<String,UsageStats> queryUsageStatsMap = mUsageStatsManager
+                .queryAndAggregateUsageStats( cal.getTimeInMillis(),
+                        System.currentTimeMillis());
+        List<UsageStats> queryUsageStats=new ArrayList<UsageStats>() ;
+        for(Map.Entry<String,UsageStats> stat: queryUsageStatsMap.entrySet())
+        {
+            queryUsageStats.add(stat.getValue());
+        }
 
         if (queryUsageStats.size() == 0) {
             Log.i(TAG, "The user may not allow the access to apps usage. ");

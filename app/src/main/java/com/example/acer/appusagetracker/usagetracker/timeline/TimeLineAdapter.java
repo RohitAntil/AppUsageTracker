@@ -3,21 +3,16 @@ package com.example.acer.appusagetracker.usagetracker.timeline;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.acer.appusagetracker.R;
-import com.example.acer.appusagetracker.usagetracker.UsageEventsItem;
 import com.vipul.hp_hp.timelineview.TimelineView;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 

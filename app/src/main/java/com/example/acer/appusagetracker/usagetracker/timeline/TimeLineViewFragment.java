@@ -1,4 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
+package com.example.acer.appusagetracker.usagetracker.timeline;
 
 ;import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.acer.appusagetracker.R;
+import com.example.acer.appusagetracker.usagetracker.timeline.UsageEventsItem;
 import com.example.acer.appusagetracker.usagetracker.timeline.TimeLineAdapter;
 import com.example.acer.appusagetracker.usagetracker.timeline.TimeLineModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,14 +59,10 @@ public class TimeLineViewFragment extends Fragment {
     }
     private List<UsageEventsItem> getTimeStamps()
     { int interval = UsageStatsManager.INTERVAL_DAILY;
-        Calendar calendar = Calendar.getInstance();
-        long endTime = calendar.getTimeInMillis();
-        //calendar.add(Calendar.DAY_OF_MONTH,-1);
-      //  endTime=calendar.getTimeInMillis();
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        long startTime = calendar.getTimeInMillis();
+        Date endTime=new Date();
+        Date startTime =trim(endTime);
         UsageStatsManager usageStatsMgr = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        UsageEvents events = usageStatsMgr.queryEvents(startTime, endTime);
+        UsageEvents events = usageStatsMgr.queryEvents(startTime.getTime(), endTime.getTime());
         List<UsageEventsItem> results = new ArrayList<>();
         UsageEvents.Event event = new UsageEvents.Event();
         PackageManager pm = getActivity().getPackageManager();
@@ -81,9 +78,19 @@ public class TimeLineViewFragment extends Fragment {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
+            if(item.type==1)
             results.add(item);
         }
         Collections.sort(results, new UsageEventsItem.UsageTimeComparator());
         return results;
+    }
+    public static Date trim(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        return calendar.getTime();
     }
 }

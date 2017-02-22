@@ -1,6 +1,4 @@
-package com.example.acer.appusagetracker.usagetracker;
-
-import android.icu.text.SimpleDateFormat;
+package com.example.acer.appusagetracker.usagetracker.timeline;
 
 import java.util.Comparator;
 import java.util.Date;
