@@ -14,12 +14,13 @@ public class ScreenLockTable {
     private static final String DATABASE_CREATE = "create table "
             + TABLE_LOCK
             + "("
-            + COLUMN_DATE + " long primary key autoincrement , "
-            + COLUMN_COUNT + " integer not null, "
+            + COLUMN_DATE + " text primary key  , "
+            + COLUMN_COUNT + " integer not null "
             + ");";
 
     /* will be used to create database and notes table */
     public static void onCreate(SQLiteDatabase database) {
+
         database.execSQL(DATABASE_CREATE);
     }
 

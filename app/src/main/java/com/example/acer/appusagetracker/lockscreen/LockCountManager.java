@@ -37,7 +37,7 @@ public class LockCountManager  {
         mDbHelper.close();
     }
 
-    public long createTableEntry(long date,int count) {
+    public long createTableEntry(String date,int count) {
         ContentValues values = new ContentValues();
         values.put(ScreenLockTable.COLUMN_DATE, date);
         values.put(ScreenLockTable.COLUMN_COUNT, count);
@@ -45,13 +45,13 @@ public class LockCountManager  {
         return insertId;
     }
 
-    public long updateLockCount(long date,int count) {
-
+    public long updateLockCount(String date,int count) {
+        String whereClause = ScreenLockTable.COLUMN_DATE+"=?";
+        String [] whereArgs = {date.toString()};
         ContentValues values = new ContentValues();
         values.put(ScreenLockTable.COLUMN_DATE, date);
         values.put(ScreenLockTable.COLUMN_COUNT, count);
-        long insertId = mDatabase.update(ScreenLockTable.TABLE_LOCK, values, ScreenLockTable.COLUMN_DATE
-                + " = " + date, null);
+        long insertId = mDatabase.update(ScreenLockTable.TABLE_LOCK, values, whereClause, whereArgs);
         return insertId;
     }
 
@@ -60,7 +60,7 @@ public class LockCountManager  {
                 + " = " + date, null);
         return deleteStatus;
     }
-    public int getCount(long date)
+    public int getCount(String date)
     {
         Cursor cursor = mDatabase.query(ScreenLockTable.TABLE_LOCK,
                 mAllColumns,  ScreenLockTable.COLUMN_DATE
@@ -75,33 +75,31 @@ public class LockCountManager  {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Lock lock = cursorToLock_Object(cursor);
-              countList.add(lock);
+            countList.add(lock);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
         return countList;
     }
-    public boolean isEntryExists(String date) {
-        List<Lock> countList=new ArrayList<Lock>();
+    public int isEntryExists(String date) {
 
         Cursor cursor = mDatabase.query(ScreenLockTable.TABLE_LOCK,
                 mAllColumns, null, null, null, null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Lock lock = cursorToLock_Object(cursor);
-            countList.add(lock);
-            cursor.moveToNext();
+           if(date.equalsIgnoreCase(cursor.getString(0)))
+           {
+               return cursor.getInt(1);
+           }
         }
         // make sure to close the cursor
         cursor.close();
-        return false;
+        return -1;
     }
     private Lock cursorToLock_Object(Cursor cursor) {
         Lock lock = new Lock();
-        Date date=new Date(cursor.getLong(0));
-        DateFormat format=SimpleDateFormat.getDateInstance();
-        lock.setDate(format.format(date));
+        lock.setDate(cursor.getString(0));
         lock.setCount(cursor.getInt(1));
         return lock;
     }

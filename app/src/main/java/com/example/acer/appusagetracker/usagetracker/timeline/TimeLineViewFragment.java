@@ -67,19 +67,20 @@ public class TimeLineViewFragment extends Fragment {
         UsageEvents.Event event = new UsageEvents.Event();
         PackageManager pm = getActivity().getPackageManager();
         while (events.getNextEvent(event)) {
-            UsageEventsItem item = new UsageEventsItem();
-            item.pkgName = event.getPackageName();
-            item.className = event.getClassName();
-            item.type = event.getEventType();
-            item.timeStamp = event.getTimeStamp();
-            item.appName = item.pkgName;
-            try {
-                item.appName = pm.getApplicationInfo(item.pkgName, 0).loadLabel(pm).toString();
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+            if(event.getEventType()==1) {
+                UsageEventsItem item = new UsageEventsItem();
+                item.pkgName = event.getPackageName();
+                item.className = event.getClassName();
+                item.type = event.getEventType();
+                item.timeStamp = event.getTimeStamp();
+                item.appName = item.pkgName;
+                try {
+                    item.appName = pm.getApplicationInfo(item.pkgName, 0).loadLabel(pm).toString();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                results.add(item);
             }
-            if(item.type==1)
-            results.add(item);
         }
         Collections.sort(results, new UsageEventsItem.UsageTimeComparator());
         return results;

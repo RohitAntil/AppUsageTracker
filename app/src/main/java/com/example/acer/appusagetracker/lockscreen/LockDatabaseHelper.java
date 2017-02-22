@@ -18,6 +18,7 @@ public class LockDatabaseHelper extends SQLiteOpenHelper {
     // Method is called during creation of the database
     @Override
     public void onCreate(SQLiteDatabase database) {
+
         ScreenLockTable.onCreate(database);
     }
 

@@ -8,7 +8,7 @@ import android.content.Intent;
  * Created by rohit02.kumar on 2/21/2017.
  */
 public class PhoneBootReciever extends BroadcastReceiver {
-
+/* Recieves events when phone boot is completed */
         @Override
         public void onReceive(Context context, Intent intent) {
 

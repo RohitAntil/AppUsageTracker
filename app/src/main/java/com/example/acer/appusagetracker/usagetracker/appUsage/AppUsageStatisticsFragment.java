@@ -89,6 +89,14 @@ public class AppUsageStatisticsFragment extends Fragment {
         mRecyclerView.setAdapter(mUsageListAdapter);
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
         mSpinner = (Spinner) rootView.findViewById(R.id.spinner_time_span);
+
+    }
+
+    /* setting Spinner and RecyclerView Adapters */
+    @Override
+    public void onResume() {
+        super.onResume();
+
         SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(spinnerAdapter);
@@ -112,6 +120,7 @@ public class AppUsageStatisticsFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
     }
 
     /**
