@@ -22,10 +22,11 @@ public class UnlockReciever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             manager=new LockCountManager(context);
+
             DateFormat df = new SimpleDateFormat("dd/MM/yy");
             Date dateobj = new Date();
-     //       System.out.println(df.format(dateobj));
             String date=df.format(dateobj);
+            /*checking into database whether todays date entry is created or not */
             manager.open();
             int isExists=manager.isEntryExists(date);
             if(isExists!=-1)

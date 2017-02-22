@@ -48,7 +48,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         final UsageEventsItem timeLineModel = mFeedList.get(position);
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date(timeLineModel.timeStamp));
         holder.name.setText(timeLineModel.appName);
-        holder.time.setText(currentDateTimeString);
+        holder.time.setText((timeLineModel.totalTimeInForeground/1000)+" secs");
+        holder.dateTime.setText(currentDateTimeString);
         Drawable appIcon;
         try {
              appIcon = mContext.getPackageManager()
@@ -71,12 +72,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     static public class TimeLineViewHolder extends RecyclerView.ViewHolder {
         public TimelineView mTimelineView;
         public TextView name;
+        public TextView dateTime;
         public TextView time;
         public ImageView icon;
         public TimeLineViewHolder(View itemView, int viewType) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.tx_name);
-            time= (TextView) itemView.findViewById(R.id.tx_time);
+            dateTime= (TextView) itemView.findViewById(R.id.tx_dateTime);
+            time= (TextView) itemView.findViewById(R.id.txt_time);
             icon=(ImageView) itemView.findViewById(R.id.icon) ;
             mTimelineView = (TimelineView) itemView.findViewById(R.id.time_marker);
             mTimelineView.initLine(viewType);

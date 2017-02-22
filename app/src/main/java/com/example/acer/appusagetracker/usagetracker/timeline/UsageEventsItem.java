@@ -12,6 +12,7 @@ public class UsageEventsItem {
     public  int type;
     public  long timeStamp;
     public String appName;
+    public long totalTimeInForeground;
 
     @Override
     public String toString() {

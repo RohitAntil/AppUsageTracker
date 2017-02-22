@@ -68,12 +68,15 @@ public class TimeLineViewFragment extends Fragment {
         PackageManager pm = getActivity().getPackageManager();
         while (events.getNextEvent(event)) {
             if(event.getEventType()==1) {
+                UsageEvents.Event eventBackground = new UsageEvents.Event();
                 UsageEventsItem item = new UsageEventsItem();
                 item.pkgName = event.getPackageName();
                 item.className = event.getClassName();
                 item.type = event.getEventType();
                 item.timeStamp = event.getTimeStamp();
                 item.appName = item.pkgName;
+                events.getNextEvent(event);
+                item.totalTimeInForeground=event.getTimeStamp()- item.timeStamp;
                 try {
                     item.appName = pm.getApplicationInfo(item.pkgName, 0).loadLabel(pm).toString();
                 } catch (PackageManager.NameNotFoundException e) {

@@ -112,18 +112,18 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
                 DateFormat dateFormat= SimpleDateFormat.getDateTimeInstance();
                 final Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.app_dialog);
-                String versionName = "";
-                int versionCode = -1;
-                try {
-                    PackageInfo packageInfo = pm.getPackageInfo(mCustomUsageStatsList.get(position).usageStats.getPackageName(), 0);
-                    versionName = packageInfo.versionName;
-                    versionCode = packageInfo.versionCode;
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
+//                String versionName = "";
+//                int versionCode = -1;
+//                try {
+//                    PackageInfo packageInfo = pm.getPackageInfo(mCustomUsageStatsList.get(position).usageStats.getPackageName(), 0);
+//                    versionName = packageInfo.versionName;
+//                    versionCode = packageInfo.versionCode;
+//                } catch (PackageManager.NameNotFoundException e) {
+//                    e.printStackTrace();
+//                }
                 dialog.setTitle("Usage Details");
                 TextView text = (TextView) dialog.findViewById(R.id.appname);
-                text.setText(mCustomUsageStatsList.get(position).usageStats.getPackageName()+" "+versionName+" "+versionCode);
+                text.setText(applicationName);
                 TextView lastused = (TextView) dialog.findViewById(R.id.last_used);
                 lastused.setText("Last Used : "+dateFormat.format(new Date(mCustomUsageStatsList.get(position).usageStats.getLastTimeUsed())));
                 TextView totalused = (TextView) dialog.findViewById(R.id.total_used);
