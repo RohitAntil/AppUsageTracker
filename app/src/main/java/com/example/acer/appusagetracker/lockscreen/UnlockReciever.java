@@ -39,7 +39,7 @@ public class UnlockReciever extends BroadcastReceiver {
              manager.close();
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(context)
-                                .setSmallIcon(R.drawable.ic_default_app_launcher)
+                                .setSmallIcon(R.mipmap.app_icon)
                                 .setContentTitle("App Usage")
                                 .setContentText("Today device unlocked "+ isExists +" times ");
 
