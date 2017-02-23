@@ -68,29 +68,23 @@ public class TimeLineViewFragment extends Fragment {
         List<UsageEventsItem> results = new ArrayList<>();
         UsageEvents.Event event = new UsageEvents.Event();
         PackageManager pm = getActivity().getPackageManager();
-        UsageEvents.Event start = new UsageEvents.Event();
+        UsageEventsItem start;
         events.getNextEvent(event);
-        UsageEvents.Event last = new UsageEvents.Event();
+        start=convertToItem(event);
+        UsageEventsItem last=null ;
         while (events.getNextEvent(event)) {
-            if(!event.getPackageName().equalsIgnoreCase(start.getPackageName())) {
-                UsageEventsItem item = new UsageEventsItem();
-                item.pkgName = start.getPackageName();
-                item.className = start.getClassName();
-                item.type = start.getEventType();
-                item.timeStamp = start.getTimeStamp();
-                item.appName = item.pkgName;
-                events.getNextEvent(event);
-                item.totalTimeInForeground=last.getTimeStamp()- item.timeStamp;
+            if(!event.getPackageName().equalsIgnoreCase(start.pkgName)) {
+                start.totalTimeInForeground=last.timeStamp- start.timeStamp;
                 try {
-                    item.appName = pm.getApplicationInfo(item.pkgName, 0).loadLabel(pm).toString();
+                    start.appName = pm.getApplicationInfo(start.pkgName, 0).loadLabel(pm).toString();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                results.add(item);
-                start=event;
+                results.add(start);
+                start=convertToItem(event);
             }else
             {
-                last=event;
+                last=convertToItem(event);
             }
         }
         Collections.sort(results, new UsageEventsItem.UsageTimeComparator());
@@ -104,5 +98,17 @@ public class TimeLineViewFragment extends Fragment {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         return calendar.getTime();
+    }
+
+    public UsageEventsItem  convertToItem(UsageEvents.Event event)
+    {
+        UsageEventsItem item = new UsageEventsItem();
+        item.pkgName = event.getPackageName();
+        item.className = event.getClassName();
+        item.type = event.getEventType();
+        item.timeStamp = event.getTimeStamp();
+        item.appName = item.pkgName;
+
+       return item;
     }
 }
