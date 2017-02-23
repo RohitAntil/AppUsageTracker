@@ -7,10 +7,14 @@
         statistics. You may need to enable access
         for this app through Settings > Security > Apps with usage access
     </string>
-    <string-array name="action_list">
+    <string-array name="action_timespan">
         <item>Daily</item>
         <item>Weekly</item>
         <item>Monthly</item>
         <item>Yearly</item>
+    </string-array>
+    <string-array name="action_sort">
+        <item>Name</item>
+        <item>Percentage</item>
     </string-array>
 </resources>

@@ -9,12 +9,16 @@ package com.example.acer.appusagetracker.usagetracker.appUsage;
         import android.content.pm.ApplicationInfo;
         import android.content.pm.PackageInfo;
         import android.content.pm.PackageManager;
+        import android.content.res.ColorStateList;
+        import android.graphics.Color;
+        import android.graphics.PorterDuff;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.Button;
         import android.widget.ImageView;
+        import android.widget.ProgressBar;
         import android.widget.TextView;
 
         import com.example.acer.appusagetracker.R;
@@ -48,6 +52,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
         private final TextView mLastTimeUsed;
         private final ImageView mAppIcon;
         private final TextView mPercentage;
+        private final ProgressBar pb ;
         private Context mContext;
 
         public ViewHolder(View v) {
@@ -56,6 +61,7 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
             mLastTimeUsed = (TextView) v.findViewById(R.id.textview_total_time);
             mAppIcon = (ImageView) v.findViewById(R.id.app_icon);
             mPercentage=(TextView) v.findViewById(R.id.percentage);
+            pb=(ProgressBar) v.findViewById(R.id.pb);
         }
 
 
@@ -73,6 +79,9 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
         public TextView getPercentage() {
             return mPercentage;
+        }
+        public ProgressBar getProgressBar() {
+            return pb;
         }
     }
 
@@ -102,9 +111,17 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
         final long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
           viewHolder.getLastTimeUsed().setText(calculateTime(timeInForeground));
+        double percent=timeInForeground*100.0/(double)total;
         viewHolder.getPercentage().setText(calculatePercent(timeInForeground));
        // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+        if(percent>10)
+        {
+            viewHolder.getProgressBar().setProgressTintList(ColorStateList.valueOf(Color.RED));
+        }else{
+            viewHolder.getProgressBar().setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+        }
+        viewHolder.getProgressBar().setProgress((int)percent);
 
         /* onItemClickListener() */
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

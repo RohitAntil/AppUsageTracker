@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent myIntent = new Intent(this,UnlockCountService.class);
         this.startService(myIntent);
-        stopService(new Intent(this, UnlockCountService.class));
+    //    stopService(new Intent(this, UnlockCountService.class));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter

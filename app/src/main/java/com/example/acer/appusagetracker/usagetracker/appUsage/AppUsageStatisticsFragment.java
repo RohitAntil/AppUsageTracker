@@ -3,12 +3,14 @@ package com.example.acer.appusagetracker.usagetracker.appUsage;
 /**
  * Created by Acer on 1/18/2017.
  */
+import android.app.ProgressDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -25,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.example.acer.appusagetracker.MainActivity;
 import com.example.acer.appusagetracker.R;
 
 import java.util.ArrayList;
@@ -46,7 +49,8 @@ public class AppUsageStatisticsFragment extends Fragment {
     UsageListAdapter mUsageListAdapter;
     RecyclerView mRecyclerView;
     Button mOpenUsageSettingButton;
-    Spinner mSpinner;
+    Spinner mSpinnerTimeSpan;
+    Spinner mSpinnerSort;
     private GridLayoutManager mGridLayoutManager;
 
     /**
@@ -88,7 +92,8 @@ public class AppUsageStatisticsFragment extends Fragment {
         //mRecyclerView.scrollToPosition(0);
         mRecyclerView.setAdapter(mUsageListAdapter);
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
-        mSpinner = (Spinner) rootView.findViewById(R.id.spinner_time_span);
+        mSpinnerTimeSpan = (Spinner) rootView.findViewById(R.id.spinner_time_span);
+        mSpinnerSort = (Spinner) rootView.findViewById(R.id.spinner_sort);
 
     }
 
@@ -97,12 +102,45 @@ public class AppUsageStatisticsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(spinnerAdapter);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        setmSpinnerTimeSpanAdapter();
+        setmSpinnerSortAdapter();
 
-            String[] strings = getResources().getStringArray(R.array.action_list);
+    }
+public void setmSpinnerTimeSpanAdapter()
+{
+    SpinnerAdapter timespan_spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
+            R.array.action_timespan, android.R.layout.simple_spinner_dropdown_item);
+    mSpinnerTimeSpan.setAdapter(timespan_spinnerAdapter);
+    mSpinnerTimeSpan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+//           AsyncTaskRunner task=new AsyncTaskRunner(position);
+//            task.execute();
+            String[] strings = getResources().getStringArray(R.array.action_timespan);
+            StatsUsageInterval statsUsageInterval = StatsUsageInterval
+                    .getValue(strings[position]);
+            if (statsUsageInterval != null) {
+                List<UsageStats> usageStatsList =
+                        getUsageStatistics(statsUsageInterval.mInterval);
+                Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+                updateAppsList(usageStatsList);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    });
+}
+    public void setmSpinnerSortAdapter(){
+        SpinnerAdapter sort_spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.action_sort, android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerSort.setAdapter(sort_spinnerAdapter);
+        mSpinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            String[] strings = getResources().getStringArray(R.array.action_sort);
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -120,6 +158,47 @@ public class AppUsageStatisticsFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+    class AsyncTaskRunner extends AsyncTask<String, String, String> {
+
+        private int position;
+        ProgressDialog progressDialog;
+         AsyncTaskRunner(int pos)
+         {
+          this.position=pos;
+         }
+        @Override
+        protected String doInBackground(String... params) {
+            String[] strings = getResources().getStringArray(R.array.action_timespan);
+            StatsUsageInterval statsUsageInterval = StatsUsageInterval
+                    .getValue(strings[position]);
+            if (statsUsageInterval != null) {
+                List<UsageStats> usageStatsList =
+                        getUsageStatistics(statsUsageInterval.mInterval);
+                Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+                updateAppsList(usageStatsList);
+            }
+            return position+"";
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            // execution of result of Long time consuming operation
+            progressDialog.dismiss();
+
+        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Loading",null);
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... text) {
+
+        }
 
     }
 
