@@ -33,6 +33,7 @@ public class TimeLineViewFragment extends Fragment {
     private TimeLineAdapter mTimeLineAdapter;
 
     private List<TimeLineModel> mDataList = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class TimeLineViewFragment extends Fragment {
         mTimeLineAdapter = new TimeLineAdapter(timeline,getContext());
         mRecyclerView.setAdapter(mTimeLineAdapter);
     }
+
     private List<UsageEventsItem> getTimeStamps()
     { int interval = UsageStatsManager.INTERVAL_DAILY;
         Date endTime=new Date();
@@ -66,23 +68,29 @@ public class TimeLineViewFragment extends Fragment {
         List<UsageEventsItem> results = new ArrayList<>();
         UsageEvents.Event event = new UsageEvents.Event();
         PackageManager pm = getActivity().getPackageManager();
+        UsageEvents.Event start = new UsageEvents.Event();
+        events.getNextEvent(event);
+        UsageEvents.Event last = new UsageEvents.Event();
         while (events.getNextEvent(event)) {
-            if(event.getEventType()==1) {
-                UsageEvents.Event eventBackground = new UsageEvents.Event();
+            if(!event.getPackageName().equalsIgnoreCase(start.getPackageName())) {
                 UsageEventsItem item = new UsageEventsItem();
-                item.pkgName = event.getPackageName();
-                item.className = event.getClassName();
-                item.type = event.getEventType();
-                item.timeStamp = event.getTimeStamp();
+                item.pkgName = start.getPackageName();
+                item.className = start.getClassName();
+                item.type = start.getEventType();
+                item.timeStamp = start.getTimeStamp();
                 item.appName = item.pkgName;
                 events.getNextEvent(event);
-                item.totalTimeInForeground=event.getTimeStamp()- item.timeStamp;
+                item.totalTimeInForeground=last.getTimeStamp()- item.timeStamp;
                 try {
                     item.appName = pm.getApplicationInfo(item.pkgName, 0).loadLabel(pm).toString();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
                 results.add(item);
+                start=event;
+            }else
+            {
+                last=event;
             }
         }
         Collections.sort(results, new UsageEventsItem.UsageTimeComparator());
