@@ -98,7 +98,7 @@ public class AppUsageStatisticsFragment extends Fragment {
         mRecyclerView.setAdapter(mUsageListAdapter);
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
         mSpinnerTimeSpan = (Spinner) rootView.findViewById(R.id.spinner_time_span);
-        mSpinnerSort = (Spinner) rootView.findViewById(R.id.spinner_sort);
+      //  mSpinnerSort = (Spinner) rootView.findViewById(R.id.spinner_sort);
 //        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -134,7 +134,7 @@ public class AppUsageStatisticsFragment extends Fragment {
         super.onResume();
 
         setmSpinnerTimeSpanAdapter();
-        setmSpinnerSortAdapter();
+        //setmSpinnerSortAdapter();
 
     }
 
@@ -165,31 +165,31 @@ public void setmSpinnerTimeSpanAdapter()
         }
     });
 }
-    public void setmSpinnerSortAdapter(){
-        SpinnerAdapter sort_spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.action_sort, android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerSort.setAdapter(sort_spinnerAdapter);
-        mSpinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            String[] strings = getResources().getStringArray(R.array.action_sort);
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                StatsUsageInterval statsUsageInterval = StatsUsageInterval
-                        .getValue(strings[position]);
-                if (statsUsageInterval != null) {
-                    List<UsageStats> usageStatsList =
-                            getUsageStatistics(statsUsageInterval.mInterval);
-                    Collections.sort(usageStatsList, new timeInForegroundComparator());
-                    updateAppsList(usageStatsList);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
+//    public void setmSpinnerSortAdapter(){
+//        SpinnerAdapter sort_spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
+//                R.array.action_sort, android.R.layout.simple_spinner_dropdown_item);
+////        mSpinnerSort.setAdapter(sort_spinnerAdapter);
+////        mSpinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+////
+////            String[] strings = getResources().getStringArray(R.array.action_sort);
+////
+////            @Override
+////            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+////                StatsUsageInterval statsUsageInterval = StatsUsageInterval
+////                        .getValue(strings[position]);
+////                if (statsUsageInterval != null) {
+////                    List<UsageStats> usageStatsList =
+////                            getUsageStatistics(statsUsageInterval.mInterval);
+////                    Collections.sort(usageStatsList, new timeInForegroundComparator());
+////                    updateAppsList(usageStatsList);
+////                }
+////            }
+////
+////            @Override
+////            public void onNothingSelected(AdapterView<?> parent) {
+////            }
+////        });
+//    }
     class AsyncTaskRunner extends AsyncTask<String, String, String> {
 
         private int position;
@@ -255,7 +255,7 @@ public void setmSpinnerTimeSpanAdapter()
             cal.set(Calendar.HOUR_OF_DAY, 0);
         }
         else if(intervalType==UsageStatsManager.INTERVAL_WEEKLY)
-            cal.add(Calendar.WEEK_OF_MONTH, -1);
+            cal.add(Calendar.DATE, -7);
         else if(intervalType==UsageStatsManager.INTERVAL_MONTHLY)
             cal.add(Calendar.MONTH, -1);
         else if(intervalType==UsageStatsManager.INTERVAL_YEARLY)
@@ -352,6 +352,7 @@ public void setmSpinnerTimeSpanAdapter()
      * values for intervals can be found by a String representation.
      *
      */
+
     //VisibleForTesting
     static enum StatsUsageInterval {
         DAILY("Daily", UsageStatsManager.INTERVAL_DAILY),
