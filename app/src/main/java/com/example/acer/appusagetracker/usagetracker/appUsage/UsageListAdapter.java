@@ -111,9 +111,10 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
         final long timeInForeground = mCustomUsageStatsList.get(position).usageStats.getTotalTimeInForeground();
           viewHolder.getLastTimeUsed().setText(calculateTime(timeInForeground));
+
         double percent=timeInForeground*100.0/(double)total;
         viewHolder.getPercentage().setText(calculatePercent(timeInForeground));
-       // viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed/1000)));
+
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
         if(percent>10)
         {
@@ -129,15 +130,6 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
                 DateFormat dateFormat= SimpleDateFormat.getDateTimeInstance();
                 final Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.app_dialog);
-//                String versionName = "";
-//                int versionCode = -1;
-//                try {
-//                    PackageInfo packageInfo = pm.getPackageInfo(mCustomUsageStatsList.get(position).usageStats.getPackageName(), 0);
-//                    versionName = packageInfo.versionName;
-//                    versionCode = packageInfo.versionCode;
-//                } catch (PackageManager.NameNotFoundException e) {
-//                    e.printStackTrace();
-//                }
                 dialog.setTitle("Usage Details");
                 TextView text = (TextView) dialog.findViewById(R.id.appname);
                 text.setText(applicationName);

@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:design:25.0.0'
     compile 'com.github.vipulasri:timelineview:1.0.3'
+    compile 'com.github.clans:fab:1.6.2'
 }

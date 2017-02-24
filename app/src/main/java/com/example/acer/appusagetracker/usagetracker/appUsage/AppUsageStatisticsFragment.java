@@ -8,6 +8,7 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -29,7 +30,8 @@ import android.widget.Toast;
 
 import com.example.acer.appusagetracker.MainActivity;
 import com.example.acer.appusagetracker.R;
-
+import com.github.clans.fab.FloatingActionMenu;
+import com.github.clans.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -52,6 +54,9 @@ public class AppUsageStatisticsFragment extends Fragment {
     Spinner mSpinnerTimeSpan;
     Spinner mSpinnerSort;
     private GridLayoutManager mGridLayoutManager;
+    FloatingActionMenu materialDesignFAM;
+    FloatingActionButton floatingActionButton1, floatingActionButton2;
+    List<UsageStats> usageStatsList;
 
     /**
      * Use this factory method to create a new instance of
@@ -94,6 +99,31 @@ public class AppUsageStatisticsFragment extends Fragment {
         mOpenUsageSettingButton = (Button) rootView.findViewById(R.id.button_open_usage_setting);
         mSpinnerTimeSpan = (Spinner) rootView.findViewById(R.id.spinner_time_span);
         mSpinnerSort = (Spinner) rootView.findViewById(R.id.spinner_sort);
+//        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Toast.makeText(getActivity(),"Options",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
+        floatingActionButton1 = (FloatingActionButton) rootView.findViewById(R.id.material_design_floating_action_alpha);
+        floatingActionButton2 = (FloatingActionButton) rootView.findViewById(R.id.material_design_floating_action_usage);
+
+        floatingActionButton1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu first item clicked
+                Collections.sort(usageStatsList, new AlphabeticComparator());
+                updateAppsList(usageStatsList);
+            }
+        });
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu second item clicked
+
+            }
+        });
 
     }
 
@@ -106,6 +136,7 @@ public class AppUsageStatisticsFragment extends Fragment {
         setmSpinnerSortAdapter();
 
     }
+
 public void setmSpinnerTimeSpanAdapter()
 {
     SpinnerAdapter timespan_spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
@@ -122,9 +153,8 @@ public void setmSpinnerTimeSpanAdapter()
             StatsUsageInterval statsUsageInterval = StatsUsageInterval
                     .getValue(strings[position]);
             if (statsUsageInterval != null) {
-                List<UsageStats> usageStatsList =
-                        getUsageStatistics(statsUsageInterval.mInterval);
-                Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+                usageStatsList = getUsageStatistics(statsUsageInterval.mInterval);
+                Collections.sort(usageStatsList, new timeInForegroundComparator());
                 updateAppsList(usageStatsList);
             }
         }
@@ -149,7 +179,7 @@ public void setmSpinnerTimeSpanAdapter()
                 if (statsUsageInterval != null) {
                     List<UsageStats> usageStatsList =
                             getUsageStatistics(statsUsageInterval.mInterval);
-                    Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+                    Collections.sort(usageStatsList, new timeInForegroundComparator());
                     updateAppsList(usageStatsList);
                 }
             }
@@ -175,7 +205,7 @@ public void setmSpinnerTimeSpanAdapter()
             if (statsUsageInterval != null) {
                 List<UsageStats> usageStatsList =
                         getUsageStatistics(statsUsageInterval.mInterval);
-                Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+                Collections.sort(usageStatsList, new timeInForegroundComparator());
                 updateAppsList(usageStatsList);
             }
             return position+"";
@@ -229,14 +259,6 @@ public void setmSpinnerTimeSpanAdapter()
             cal.add(Calendar.MONTH, -1);
         else if(intervalType==UsageStatsManager.INTERVAL_YEARLY)
             cal.add(Calendar.YEAR, -1);
-
-//        List<UsageStats> queryUsageStats = mUsageStatsManager
-//                .queryUsageStats(intervalType, cal.getTimeInMillis(),
-//                        System.currentTimeMillis());
-//        for(UsageStats st:queryUsageStats)
-//        {
-//            Log.i(st.getPackageName(),st.toString());
-//        }
 
         Map<String,UsageStats> queryUsageStatsMap = mUsageStatsManager
                 .queryAndAggregateUsageStats( cal.getTimeInMillis(),
@@ -296,14 +318,34 @@ public void setmSpinnerTimeSpanAdapter()
      * The {@link Comparator} to sort a collection of {@link UsageStats} sorted by the timestamp
      * last time the app was used in the descendant order.
      */
-    private static class LastTimeLaunchedComparatorDesc implements Comparator<UsageStats> {
+    private  class timeInForegroundComparator implements Comparator<UsageStats> {
 
         @Override
         public int compare(UsageStats left, UsageStats right) {
             return Long.compare(right.getTotalTimeInForeground(), left.getTotalTimeInForeground());
         }
     }
+    private  class AlphabeticComparator implements Comparator<UsageStats> {
 
+        @Override
+        public int compare(UsageStats left, UsageStats right) {
+            PackageManager pm= getActivity().getPackageManager();
+            ApplicationInfo ai_left=null;
+            ApplicationInfo ai_right=null;
+            try {
+                ai_left=pm.getApplicationInfo(left.getPackageName(), 0);
+                ai_right=pm.getApplicationInfo(left.getPackageName(), 0);
+
+            }catch (final PackageManager.NameNotFoundException e) {
+                ai_left = null;
+                ai_right = null;
+            }
+            final String applicationNameLeft = (String) (ai_left != null ? pm.getApplicationLabel(ai_left) : "(unknown)");
+            final String applicationNameRight = (String) (ai_right != null ? pm.getApplicationLabel(ai_right) : "(unknown)");
+         //   return applicationNameLeft.compareTo(applicationNameRight);
+            return left.getPackageName().compareTo(right.getPackageName());
+        }
+    }
     /**
      * Enum represents the intervals for {@link android.app.usage.UsageStatsManager} so that
      * values for intervals can be found by a String representation.
