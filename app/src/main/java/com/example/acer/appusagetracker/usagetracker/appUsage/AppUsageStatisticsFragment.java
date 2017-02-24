@@ -121,7 +121,8 @@ public class AppUsageStatisticsFragment extends Fragment {
         floatingActionButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO something when floating action menu second item clicked
-
+                Collections.sort(usageStatsList, new timeInForegroundComparator());
+                updateAppsList(usageStatsList);
             }
         });
 
@@ -334,7 +335,7 @@ public void setmSpinnerTimeSpanAdapter()
             ApplicationInfo ai_right=null;
             try {
                 ai_left=pm.getApplicationInfo(left.getPackageName(), 0);
-                ai_right=pm.getApplicationInfo(left.getPackageName(), 0);
+                ai_right=pm.getApplicationInfo(right.getPackageName(), 0);
 
             }catch (final PackageManager.NameNotFoundException e) {
                 ai_left = null;
@@ -342,8 +343,8 @@ public void setmSpinnerTimeSpanAdapter()
             }
             final String applicationNameLeft = (String) (ai_left != null ? pm.getApplicationLabel(ai_left) : "(unknown)");
             final String applicationNameRight = (String) (ai_right != null ? pm.getApplicationLabel(ai_right) : "(unknown)");
-         //   return applicationNameLeft.compareTo(applicationNameRight);
-            return left.getPackageName().compareTo(right.getPackageName());
+           return applicationNameLeft.compareTo(applicationNameRight);
+
         }
     }
     /**
